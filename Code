@@ -1,0 +1,40 @@
+//program created by Ruby Tran on February 4th 2020
+//in class assignment week 5
+//resources from in class code and example Servo Sweep from Arduino examples
+
+
+#include <Servo.h>
+
+Servo myservo;  // create servo object to control a servo
+
+int pos = 0;    // variable to store the servo position
+
+void setup() {
+  pinMode(11, OUTPUT); // The L9110 can control 2 motors. Each needs 2 pin. First pin is 11
+  pinMode(12, OUTPUT); //second pin is 12
+  pinMode(8, INPUT); //button is on pin 8
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  Serial.begin(9600); //to read serial monitor
+}
+
+void loop() {
+  if(digitalRead(8) == HIGH){ // when the button is pressed
+      digitalWrite(11, LOW); // This will make the motor stops
+      digitalWrite(12, LOW); // Both lines are needed to be "low"
+      Serial.println("pressed");
+    for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+      // in steps of 1 degree
+      myservo.write(pos);              // tell servo to go to position in variable 'pos'
+      delay(15);                       // waits 15ms for the servo to reach the position
+    }
+    for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+      myservo.write(pos);              // tell servo to go to position in variable 'pos'
+      delay(15);                       // waits 15ms for the servo to reach the position
+    }
+  } else {
+      digitalWrite(11, LOW); // This will make the motor go backward when the button is not pressed
+      digitalWrite(12, HIGH);
+      Serial.println("not pressed");
+  }
+
+}
